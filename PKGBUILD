@@ -1,5 +1,5 @@
 pkgname=eos-systemd-boot
-pkgver=0.9
+pkgver=0.92
 pkgrel=1
 pkgdesc='Enables systemd-boot automation using kernel-install on EndeavourOS'
 arch=(any)
