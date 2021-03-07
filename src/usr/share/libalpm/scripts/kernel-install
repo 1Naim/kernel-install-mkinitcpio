@@ -7,6 +7,12 @@ while read -r line; do
     kernel-install $1 "${version}" "${line}"
 done
 
+# first check if we are running in a chroot
+if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
+    echo 'Running in a chroot, skipping cmdline generation'
+    exit 0
+fi
+
 # If needed, set /etc/kernel/cmdline to enable kernel-install in a chroot
 if [[ ! -e /etc/kernel/cmdline ]]; then
     mkdir -p /etc/kernel
