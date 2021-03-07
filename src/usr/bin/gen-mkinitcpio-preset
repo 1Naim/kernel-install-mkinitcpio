@@ -1,0 +1,35 @@
+#/usr/bin/env bash
+
+# Check to ensure we have the correct number of input parameters
+if [[ -z $1 || -z $2 || -z $3 ]]; then
+    echo "Usage: gen-mkinitcpio-preset <version> <kernel> <packagename>"
+    exit 1
+fi
+
+# parse the input
+version=${1}
+vmlinuz=${2}
+packagename=${3}
+
+preset_file="/etc/mkinitcpio.d/${packagename}.preset"
+
+# get the machine-id
+machineid=$(cat /etc/machine-id)
+if [[ -z ${machineid} ]]; then
+    echo "Failed to get the machine ID"
+    exit
+fi
+
+# Find the configured esp
+esp=$(bootctl -p)
+
+# create a preset compatible with kernel-install
+preset_file="/etc/mkinitcpio.d/${packagename}.preset"
+echo ":: Generating ${preset_file}"
+
+echo 'ALL_config="/etc/mkinitcpio.conf"' > ${preset_file}
+echo 'ALL_kver="'"${esp}/${machineid}/${version}/linux"'"' >> ${preset_file}
+echo 'PRESETS=('default' 'fallback')' >> ${preset_file}
+echo 'default_image="'"${esp}/${machineid}/${version}/initrd"'"' >> ${preset_file}
+echo 'fallback_image="'"${esp}/${machineid}/${version}/initrd-fallback"'"' >> ${preset_file}
+echo 'fallback_options="-S autodetect"' >> ${preset_file}

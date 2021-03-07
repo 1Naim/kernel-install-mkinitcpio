@@ -4,6 +4,13 @@ Operation = Install
 Operation = Upgrade
 Target = usr/lib/modules/*/vmlinuz
 
+[Trigger]
+Type = Package
+Operation = Install
+Target = mkinitcpio
+Target = mkinitcpio-git
+Target = eos-systemd-boot
+
 [Action]
 Description = Installing mkinitcpio presets...
 When = PostTransaction
