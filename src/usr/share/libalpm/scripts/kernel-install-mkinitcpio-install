@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-
-
 all=0
 
 while read -r line; do
@@ -21,7 +19,7 @@ while read -r line; do
 	vmlinuz="/${line}"
     packagename=$(cat ${line%/vmlinuz}/pkgbase)
 
-    echo /usr/bin/gen-mkinitcpio-preset ${version} ${vmlinuz} ${packagename}
+    /usr/bin/gen-mkinitcpio-preset ${version} ${vmlinuz} ${packagename}
 
 done
 
@@ -31,7 +29,7 @@ if [[ $all == 1 ]]; then
         version=$(basename "${pkgbasefile%/pkgbase}")
         vmlinuz="${pkgbasefile%/pkgbase}/vmlinuz"
         packagename=$(cat ${pkgbasefile})
-        echo /usr/bin/gen-mkinitcpio-preset ${version} ${vmlinuz} ${packagename}
+        /usr/bin/gen-mkinitcpio-preset ${version} ${vmlinuz} ${packagename}
     done < <(find /usr/lib/modules -maxdepth 2 -type f -name pkgbase)
 fi
 
