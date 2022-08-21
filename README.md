@@ -10,4 +10,4 @@ The package does a few things:
 * Adds support for generating fallback images to kernel-install
 * Saves kernel options to /etc/kernel/cmdline to support recovery in a chroot
 
-## NOTE: While this package was initially developed for EndeavourOS, there is nothing specific to EOS in it.  It should work with any Arch-based distro.
+#### NOTE: While this package was initially developed for EndeavourOS, there is nothing specific to EOS in it.  It should work with any Arch-based distro.
