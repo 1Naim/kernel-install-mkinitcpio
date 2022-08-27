@@ -79,7 +79,7 @@ cp "$KERNEL_IMAGE" "$ENTRY_DIR_ABS/linux" &&
     exit 1
 }
 
-INITRD_OPTIONS=( "/boot/amd-ucode.img" "/boot/intel-ucode.img" "initrd" )
+INITRD_OPTIONS=( "/boot/amd-ucode.img" "/boot/intel-ucode.img" "initrd-fallback" )
 
 for initrd in "${INITRD_OPTIONS[@]}"; do
     if [[ -f "${initrd}" ]]; then
