@@ -2,9 +2,16 @@
 
 while read -r line; do
     version=$(basename "${line%/vmlinuz}")
-    echo ":: Running kernel-install for kernel $version"
-    
-    kernel-install $1 "${version}" "${line}"
+    if [[ $1 == "remove" ]]; then
+        echo ":: kernel-install removing kernel $version"
+        kernel-install remove "${version}"
+    elif [[ $1 == "add" ]]; then
+        echo ":: kernel-install installing kernel $version"
+        kernel-install add "${version}" "${line}"
+    else
+        echo ":: Invalid option passed to kernel-install script"
+    fi
+    version=$(basename "${line%/vmlinuz}")
 done
 
 # first check if we are running in a chroot
