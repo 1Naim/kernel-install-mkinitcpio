@@ -11,6 +11,12 @@ KERNEL_IMAGE="$4"
 
 [[ "$COMMAND" == "add" ]] || exit 0
 
+# Read the optional config file
+[[ -f /etc/kernel-install-mkinitcpio.conf ]] && source /etc/kernel-install-mkinitcpio.conf
+
+# Do nothing if the user has elected to omit the fallback initrd
+[[ ${KIM_NO_FALLBACK} == "true" ]] && exit 0
+
 GENERATOR_CMD=(mkinitcpio -k "$KERNEL_VERSION")
 BLS_ARGS=(-g "$KERNEL_INSTALL_STAGING_AREA/initrd-fallback")
 
