@@ -4,8 +4,14 @@
 > doesn't support forking from GitLab so no proper fork data is available. All
 > original credits go to dalto and EndeavourOS
 
+# kernel-install-mkinitcpio
 
-# EOS systemd-boot
+This repository contains helper scripts and pacman hooks to make systemd-boot
+and kernel-install a more seamless experience in Arch Linux-based installations.
+
+# ORIGINAL README
+
+## EOS systemd-boot
 
 A package to enable systemd-boot automation using kernel-install on Arch-based distros
 
@@ -17,4 +23,4 @@ The package does a few things:
 * Adds support for generating fallback images to kernel-install
 * Saves kernel options to /etc/kernel/cmdline to support recovery in a chroot
 
-#### NOTE: While this package was initially developed for EndeavourOS, there is nothing specific to EOS in it.  It should work with any Arch-based distro.
+### NOTE: While this package was initially developed for EndeavourOS, there is nothing specific to EOS in it.  It should work with any Arch-based distro.
