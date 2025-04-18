@@ -1,5 +1,21 @@
 #!/bin/bash
 
+# update-boot-entries is a simple script that edits the kernel command line
+# arguments of your systemd-boot entries. update-boot-entries will only update
+# entries that are from the current system. This is done by matching the
+# machine-id.
+set -e
+
+if [ "$(id -u)" -ne 0 ]; then
+    echo "${0}"
+    echo ""
+    echo "Simple script that edits the kernel command line of your systemd-boot entries"
+    echo "Entries will only be updated if they are prefixed with your /etc/machine-id"
+    echo ""
+    echo "Usage: Run the script as root."
+    exit 0
+fi
+
 
 is_readable() {
     file="${1}"
