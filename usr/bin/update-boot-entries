@@ -1,5 +1,18 @@
 #!/bin/bash
 
+
+is_readable() {
+    file="${1}"
+
+    if [ ! -r "$file" ]; then
+        echo "Unable to read $file. Does the file exist?"
+        exit
+    fi
+}
+
+is_readable /etc/machine-id
+is_readable /etc/kernel/cmdline
+
 machine_id="$(< /etc/machine-id)"
 options="$(< /etc/kernel/cmdline)"
 
