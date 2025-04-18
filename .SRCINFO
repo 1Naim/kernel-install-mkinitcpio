@@ -1,0 +1,14 @@
+pkgbase = kernel-install-mkinitcpio
+	pkgdesc = A framework for enabling systemd-boot automation using kernel-install with mkinitcpio
+	pkgver = 1.8
+	pkgrel = 1
+	url = https://github.com/1Naim/kernel-install-mkinitcpio
+	arch = any
+	license = GPL-2.0-or-later
+	depends = systemd
+	depends = mkinitcpio
+	conflicts = kernel-install-for-dracut
+	source = kernel-install-mkinitcpio::git+https://github.com/1Naim/kernel-install-mkinitcpio.git
+	sha256sums = SKIP
+
+pkgname = kernel-install-mkinitcpio
