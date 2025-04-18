@@ -6,5 +6,5 @@
 while read -r kernel; do
     kernelversion=$(basename "${kernel%/vmlinuz}")
     echo "Installing kernel ${kernelversion}"
-    kernel-install add ${kernelversion} ${kernel}
+    kernel-install add "${kernelversion}" "${kernel}"
 done < <(find /usr/lib/modules -maxdepth 2 -type f -name vmlinuz)
