@@ -1,3 +1,10 @@
+> [!NOTE]
+> This repository is a fork of
+> [dalto.8/eos-system-boot](https://gitlab.com/dalto.8/eos-systemd-boot). GitHub
+> doesn't support forking from GitLab so no proper fork data is available. All
+> original credits go to dalto and EndeavourOS
+
+
 # EOS systemd-boot
 
 A package to enable systemd-boot automation using kernel-install on Arch-based distros
