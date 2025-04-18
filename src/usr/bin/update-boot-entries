@@ -1,7 +1,7 @@
 #!/bin/bash
 
 machine_id="$(< /etc/machine-id)"
-options=$(sed ':a;N;$!ba;s/\n/ /g;s/[[:space:]]*$//' /etc/kernel/cmdline)
+options="$(< /etc/kernel/cmdline)"
 
 for entry in /boot/loader/entries/*; do
     if [[ "$entry" =~ ^/boot/loader/entries/"$machine_id" ]]; then
