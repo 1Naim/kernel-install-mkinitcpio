@@ -1,22 +1,21 @@
 # Maintainer: Eric Naim <dnaim@cachyos.org
 
 pkgname=kernel-install-mkinitcpio
-pkgver=1.9
-pkgrel=2
+pkgver=1.10
+pkgrel=1
 pkgdesc='A framework for enabling systemd-boot automation using kernel-install with mkinitcpio'
 arch=(any)
 url='https://github.com/1Naim/kernel-install-mkinitcpio'
 license=('GPL-2.0-or-later')
 depends=('systemd' 'mkinitcpio')
 makedepends=('git')
-conflicts=('kernel-install-for-dracut')
+conflicts=('kernel-install-for-dracut' 'systemd-boot-manager')
 source=("${pkgname}::git+${url}.git#tag=${pkgver}")
-sha256sums=('b5239bdb3829248c40b96d1ed34c55269d563872b3d8edd439e77afc1178feca')
+sha256sums=('b219f5c91d0e34bc61c391c42ea36c2b41b5765ade89f012724ed286e3063d34')
 
 package() {
     cd "${pkgname}"
-    git cherry-pick -n f9ec2c6d059f0620ce804e9d850a76d575f712bb
-    cp -a src/{usr,etc} "${pkgdir}"
+    cp -a ./{usr,etc} "${pkgdir}"
 
     # This workaround is needed to match the behaviour of default mkinitcpio
     # kernel-install will fail to generate the kernel image and initrd when
