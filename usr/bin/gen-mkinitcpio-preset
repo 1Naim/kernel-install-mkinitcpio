@@ -29,7 +29,7 @@ echo ":: Generating ${preset_file}"
 
 echo 'ALL_config="/etc/mkinitcpio.conf"' > ${preset_file}
 echo 'ALL_kver="'"${esp}/${machineid}/${version}/linux"'"' >> ${preset_file}
-echo 'PRESETS=('default' 'fallback')' >> ${preset_file}
+echo 'PRESETS=('default')' >> ${preset_file}
 echo 'default_image="'"${esp}/${machineid}/${version}/initrd"'"' >> ${preset_file}
 echo 'fallback_image="'"${esp}/${machineid}/${version}/initrd-fallback"'"' >> ${preset_file}
 echo 'fallback_options="-S autodetect"' >> ${preset_file}
