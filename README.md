@@ -24,6 +24,11 @@ and kernel-install a more seamless experience in Arch Linux-based installations.
 This section is dedicated to the various parties and projects that helped
 improve this project, whether by idea, code, etc.
 
+### EndeavourOS
+
+[dalto8](https://github.com/dalto8) from EndeavourOS was the original author of
+this project. It has since been forked but all original attributions go to them.
+
 ### OpenSUSE
 
 The [entry
