@@ -18,3 +18,18 @@ and kernel-install a more seamless experience in Arch Linux-based installations.
 * Calculate the checksum of generated initramfs and appends it to the filename
     * This is especially useful for snapshots because we can reuse existing
       initramfs if they are the same. This helps to save storage space.
+
+## Acknowledgments
+
+This section is dedicated to the various parties and projects that helped
+improve this project, whether by idea, code, etc.
+
+### OpenSUSE
+
+The [entry
+specification](https://github.com/openSUSE/sdbootutil/blob/main/ARCHITECTURE.md)
+written by them served as a foundation for supporting bootable snapshot entries.
+[The snapper plugin](./usr/lib/snapper/plugins/10-kim.snapper) was originally
+also sourced from
+[OpenSUSE/sdbootutil](https://github.com/openSUSE/sdbootutil/blob/main/10-sdbootutil.snapper)
+and was rewritten to fit `kernel-install-mkinitcpio`'s ecosystem.
