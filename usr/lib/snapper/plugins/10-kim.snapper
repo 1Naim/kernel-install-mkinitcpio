@@ -3,12 +3,6 @@
 shopt -s extglob nullglob
 set -e
 
-ESP="$(bootctl -p)"
-ENTRY_DIR="${ESP}/loader/entries"
-MACHINE_ID="$(< /etc/machine-id)"
-
-[[ -z "$MACHINE_ID" || -z "$ESP" ]] && exit 1
-
 # when creating a snapshot we fetch all bls configs from previous snapshot dir,
 # mangle them to contain current snapshot number, then install to efi partition.
 create_snapshot() {
@@ -18,22 +12,7 @@ create_snapshot() {
 
     [ "$fs" = btrfs ] || return 1
 
-    snap_path=".snapshots/${num}"
-    for entry in "$ENTRY_DIR"/"${MACHINE_ID}"-*.conf; do
-
-        if grep -q 'post' "/${snap_path}/info.xml"; then
-            break
-        fi
-
-        [[ "$entry" =~ -[0-9]+\.conf$ ]] && continue;
-
-        snap_entry="${entry%.*}-${num}.conf"
-
-        cp "$entry" "$snap_entry"
-
-        sed -i -E "s/^(version[[:space:]]+)([0-9a-zA-Z\.\-]+)/\1S-$num@\2/" "$snap_entry"
-        sed -i "s|rootflags=subvol=/@|rootflags=subvol=/@/${snap_path}/snapshot|" "$snap_entry"
-    done
+    kim-util add "snapshots" "${num}"
 }
 
 delete_snapshot() {
@@ -43,11 +22,7 @@ delete_snapshot() {
 
     [ "$fs" = btrfs ] || return 1
 
-    for entry in "$ENTRY_DIR"/"${MACHINE_ID}"-*-"${num}".conf; do
-        bootctl unlink "${entry##*/}"
-    done
-
-    bootctl cleanup
+    kim-util remove "snapshots" "${num}"
 }
 
 h()

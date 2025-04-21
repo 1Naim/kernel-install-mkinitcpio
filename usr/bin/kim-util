@@ -1,0 +1,122 @@
+#!/bin/bash
+
+# Glorified kernel-install and bootctl wrapper script to add and remove kernel
+# entries, update kernel boot parameters, and maybe more
+set -e
+
+ESP="$(bootctl -p)"
+MACHINE_ID="$(< /etc/machine-id)"
+ENTRY_DIR="${ESP}/loader/entries"
+
+_die() {
+    echo "$@" >&2
+    exit 1
+}
+
+_checkroot() {
+    [ "$(id -u)" -eq 0 ] && return 0
+    _die "Could not perform this operation. Root privileges are required."
+}
+
+update_cmdline() {
+    _checkroot
+
+    cmdline="$(xargs < /etc/kernel/cmdline)"
+    if [[ -z "$cmdline" ]]; then
+        _die "Cannot get cmdline. Does /etc/kernel/cmdline exist and is readable?"
+    fi
+
+    # Only update entries owned by this system by matching with ${MACHINE_ID}
+    for entry in "${ENTRY_DIR}"/"${MACHINE_ID}"-*.conf; do
+        sed -i "s|^options .*|options    ${cmdline} systemd.machine_id=${MACHINE_ID}|" "$entry"
+    done
+}
+
+add_entry() {
+    _checkroot
+
+    # Represents kernel version and kernel image when used normally, but
+    # represents a stub string and snapshot ID when used by the snapper plugin
+    kerver="${1}"
+    kerimg="${2}"
+
+    if [[ -n "${kerimg}" && "${kerver}" == "snapshots" ]]; then
+        snap_path=".snapshots/${kerimg}"
+        for entry in "${ENTRY_DIR}"/"${MACHINE_ID}"-*.conf; do
+
+            if grep -q 'post' "/${snap_path}/info.xml"; then
+                break
+            fi
+
+            [[ "$entry" =~ -[0-9]+\.conf$ ]] && continue;
+
+            snap_entry="${entry%.*}-${kerimg}.conf"
+
+            cp "$entry" "$snap_entry"
+
+            sed -i -E "s/^(version[[:space:]]+)([0-9a-zA-Z\.\-]+)/\1S-$kerimg@\2/" "$snap_entry"
+            sed -i "s|rootflags=subvol=/@|rootflags=subvol=/@/${snap_path}/snapshot|" "$snap_entry"
+        done
+    else
+        # Glorified kernel-install wrapper
+        kernel-install add "${kerver}" "${kerimg}"
+    fi
+}
+
+remove_entry() {
+    _checkroot
+
+    kerver="${1}"
+    snap_id="${2}"
+
+    # Delete kernel entry if no snap_id, otherwise delete all entries matching
+    # the snap_id
+    if [[ -n "${snap_id}" && "${kerver}" == "snapshots" ]]; then
+        for s_entry in "${ENTRY_DIR}"/"${MACHINE_ID}"-*-"${snap_id}".conf; do
+            bootctl unlink "${s_entry##*/}" || true
+        done
+    else
+        bootctl unlink "${MACHINE_ID}-${kerver}.conf"
+    fi
+
+    # Extra cleanup
+    bootctl cleanup >/dev/null
+}
+
+help() {
+    echo "kim-util [OPTION] argument(s)"
+    echo ""
+    echo "OPTION:"
+    echo ""
+    echo "  add:"
+    echo "      Same as 'kernel-install add'. Accepts kernel version and corresponding vmlinuz path as arguments."
+    echo "      Requires root privileges."
+    echo "      EXAMPLE: kim-util add 6.14.3-2-cachyos /lib/modules/6.14.3-2-cachyos/vmlinuz"
+    echo ""
+    echo "  remove:"
+    echo "      Performs bootctl unlink and bootctl cleanup. Accepts a kernel version as an argument."
+    echo "      Requires root privileges."
+    echo "      EXAMPLE: kim-util remove 6.14.3-2-cachyos"
+    echo ""
+    echo "  update:"
+    echo "      Updates the boot parameters in your entry files. Parameters are taken directly from /etc/kernel/cmdline."
+    echo "      Requires root privileges."
+    echo "      EXAMPLE: kim-util update"
+    echo ""
+    echo "  help:"
+    echo "      Prints this text."
+}
+
+[[ ! -d "${ENTRY_DIR}" ]] && _die "${ENTRY_DIR} doesn't exist. Makre sure you are are using systemd-boot."
+[[ -z "${MACHINE_ID}" ]] && _die "Could not get machine id. Please reboot to repopulate /etc/machine-id"
+
+KIM_OPTION="$1"
+shift
+[[ -z "${KIM_OPTION}" ]] && KIM_OPTION="help"
+case "${KIM_OPTION}" in
+    add) add_entry "$@";;
+    remove) remove_entry "$@";;
+    update) update_cmdline;;
+    help) help;;
+    *) _die "Invalid option. Run 'kim-util help' to see proper usage of this utility";;
+esac
