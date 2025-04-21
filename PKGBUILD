@@ -1,7 +1,7 @@
 # Maintainer: Eric Naim <dnaim@cachyos.org
 
 pkgname=kernel-install-mkinitcpio
-pkgver=2.0.pre4
+pkgver=2.0
 pkgrel=1
 pkgdesc='A framework for enabling systemd-boot automation using kernel-install with mkinitcpio'
 arch=(any)
@@ -22,7 +22,7 @@ optdepends=(
 makedepends=('git')
 conflicts=('kernel-install-for-dracut' 'systemd-boot-manager')
 source=("${pkgname}::git+${url}.git#tag=${pkgver}")
-sha256sums=('a8cd2c7cfe55c995f0fd9b3d4f46a1900422af8aa8527a31fbda1969eb8c8cda')
+sha256sums=('68ab9156d1790b3aeeb06dc7866b21b6091a883adb9b625b077f18572e32f842')
 
 package() {
     cd "${pkgname}"
