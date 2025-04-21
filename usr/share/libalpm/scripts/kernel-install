@@ -4,10 +4,7 @@ while read -r line; do
     version=$(basename "${line%/vmlinuz}")
     if [[ $1 == "remove" ]]; then
         echo ":: kernel-install removing kernel $version"
-        machine_id="$(< /etc/machine-id)"
-
-        bootctl unlink "${machine_id}-${version}.conf" || true
-        bootctl cleanup >/dev/null
+        kim-util remove "${version}"
     elif [[ $1 == "add" ]]; then
         if [[ "$line" =~ .*vmlinuz$ ]]; then
             echo ":: kernel-install installing kernel $version"
