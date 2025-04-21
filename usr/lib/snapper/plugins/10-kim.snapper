@@ -44,7 +44,7 @@ delete_snapshot() {
     [ "$fs" = btrfs ] || return 1
 
     for entry in "$ENTRY_DIR"/"${MACHINE_ID}"-*-"${num}".conf; do
-        [[ -f "$entry" ]] && bootctl unlink "${entry##*/}"
+        bootctl unlink "${entry##*/}"
     done
 
     bootctl cleanup
