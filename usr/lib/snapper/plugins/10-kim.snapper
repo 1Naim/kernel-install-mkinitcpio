@@ -5,6 +5,9 @@ set -e
 
 ESP="$(bootctl -p)"
 ENTRY_DIR="${ESP}/loader/entries"
+MACHINE_ID="$(< /etc/machine-id)"
+
+[[ -z "$MACHINE_ID" || -z "$ESP" ]] && exit 1
 
 # when creating a snapshot we fetch all bls configs from previous snapshot dir,
 # mangle them to contain current snapshot number, then install to efi partition.
@@ -15,8 +18,8 @@ create_snapshot() {
 
     [ "$fs" = btrfs ] || return 1
 
-    for entry in "$ENTRY_DIR"/*.conf; do
-        snap_path=".snapshots/${num}"
+    snap_path=".snapshots/${num}"
+    for entry in "$ENTRY_DIR"/"${MACHINE_ID}"-*.conf; do
 
         if grep -q 'post' "/${snap_path}/info.xml"; then
             break
@@ -40,7 +43,7 @@ delete_snapshot() {
 
     [ "$fs" = btrfs ] || return 1
 
-    for entry in "$ENTRY_DIR"/*-"${num}".conf; do
+    for entry in "$ENTRY_DIR"/"${MACHINE_ID}"-*-"${num}".conf; do
         [[ -f "$entry" ]] && bootctl unlink "${entry##*/}"
     done
 
