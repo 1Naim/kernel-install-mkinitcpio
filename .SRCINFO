@@ -1,6 +1,6 @@
 pkgbase = kernel-install-mkinitcpio
 	pkgdesc = A framework for enabling systemd-boot automation using kernel-install with mkinitcpio
-	pkgver = 2.0.pre2
+	pkgver = 2.0.pre3
 	pkgrel = 1
 	url = https://github.com/1Naim/kernel-install-mkinitcpio
 	arch = any
@@ -15,7 +15,7 @@ pkgbase = kernel-install-mkinitcpio
 	optdepends = snapper: For bootable snapshot entries support
 	conflicts = kernel-install-for-dracut
 	conflicts = systemd-boot-manager
-	source = kernel-install-mkinitcpio::git+https://github.com/1Naim/kernel-install-mkinitcpio.git#tag=2.0.pre2
-	sha256sums = a38832a338651467081cf5378835e92973d003dfa3f66577f8e8b3e6becf31e4
+	source = kernel-install-mkinitcpio::git+https://github.com/1Naim/kernel-install-mkinitcpio.git#tag=2.0.pre3
+	sha256sums = 5222041f13d8100e21fabaa201eb5790ff0b71bd0b5e226821a4354ebc5cab4c
 
 pkgname = kernel-install-mkinitcpio
