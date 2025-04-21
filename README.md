@@ -14,6 +14,7 @@ and kernel-install a more seamless experience in Arch Linux-based installations.
 * Installs hooks to automate the installation and removal of kernels using kernel-install and bootctl
 * Script to update kernel commandline in entries by overriding with parameters
   from `/etc/kernel/cmdline`
+* Saves kernel options to `/etc/kernel/cmdline` to support recovery in a chroot
 * Create bootable snapshot entries if snapper is installed
 * Calculate the checksum of generated initramfs and appends it to the filename
     * This is especially useful for snapshots because we can reuse existing
