@@ -16,6 +16,14 @@ and kernel-install a more seamless experience in Arch Linux-based installations.
   from `/etc/kernel/cmdline`
 * Saves kernel options to `/etc/kernel/cmdline` to support recovery in a chroot
 * Create bootable snapshot entries if snapper is installed
+    * This currently assumes a subvolume layout of:
+        * @ for root
+        * @home
+        * @cache
+        * @log
+        * ...
+    * The snapper plugin also assumes that the user is only making snapshots for
+      the root subvolume.
 * Calculate the checksum of generated initramfs and appends it to the filename
     * This is especially useful for snapshots because we can reuse existing
       initramfs if they are the same. This helps to save storage space.
