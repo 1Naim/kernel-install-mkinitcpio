@@ -19,7 +19,7 @@ while read -r line; do
 done
 
 if [[ $install_all == 1 ]]; then
-    reinstall-kernels
+    kim-util add-all
 fi
 
 # first check if we are running in a chroot

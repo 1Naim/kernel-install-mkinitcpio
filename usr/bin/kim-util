@@ -63,6 +63,15 @@ add_entry() {
     fi
 }
 
+add_all() {
+    # Run kernel install for all the installed kernels
+    while read -r kernel; do
+        kernelversion=$(basename "${kernel%/vmlinuz}")
+        echo "Installing kernel ${kernelversion}"
+        kernel-install add "${kernelversion}" "${kernel}"
+    done < <(find /usr/lib/modules -maxdepth 2 -type f -name vmlinuz)
+}
+
 remove_entry() {
     _checkroot
 
@@ -93,6 +102,10 @@ help() {
     echo "      Requires root privileges."
     echo "      EXAMPLE: kim-util add 6.14.3-2-cachyos /lib/modules/6.14.3-2-cachyos/vmlinuz"
     echo ""
+    echo "  add-all:"
+    echo "      Runs 'kernel-install add' on all installed kernels found in /lib/modules."
+    echo "      EXAMPLE: kim-util add-all"
+    echo ""
     echo "  remove:"
     echo "      Performs bootctl unlink and bootctl cleanup. Accepts a kernel version as an argument."
     echo "      Requires root privileges."
@@ -115,6 +128,7 @@ shift
 [[ -z "${KIM_OPTION}" ]] && KIM_OPTION="help"
 case "${KIM_OPTION}" in
     add) add_entry "$@";;
+    'add-all') add_all;;
     remove) remove_entry "$@";;
     update) update_cmdline;;
     help) help;;
