@@ -15,7 +15,12 @@ create_snapshot() {
     # Pre snapshots are somehow always even
     entry_dir="/boot/loader/entries"
     for entry in "$entry_dir"/*.conf; do
-        (("$num" % 2 == 1)) && break
+        snap_path="${path}/.snapshots/${num}"
+
+        if grep -q 'post' "${snap_path}/info.xml"; then
+            break
+        fi
+
         [[ "$entry" =~ -[0-9]+\.conf$ ]] && continue;
 
         snap_entry="${entry%.*}-${num}.conf"
@@ -23,7 +28,7 @@ create_snapshot() {
         cp "$entry" "$snap_entry"
 
         sed -i -E "s/^(version[[:space:]]+)([0-9a-zA-Z\.\-]+)/\1$num@\2/" "$snap_entry"
-        sed -i "s|rootflags=subvol=/@|rootflags=subvol=/@/.snapshots/${num}/snapshot|" "$snap_entry"
+        sed -i "s|rootflags=subvol=/@|rootflags=subvol=/@${snap_path}/snapshot|" "$snap_entry"
     done
 }
 
