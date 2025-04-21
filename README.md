@@ -8,3 +8,13 @@
 
 This repository contains helper scripts and pacman hooks to make systemd-boot
 and kernel-install a more seamless experience in Arch Linux-based installations.
+
+## Features
+* Overrides the mkinitcpio hooks to generate presets that work with kernel-install
+* Installs hooks to automate the installation and removal of kernels using kernel-install and bootctl
+* Script to update kernel commandline in entries by overriding with parameters
+  from `/etc/kernel/cmdline`
+* Create bootable snapshot entries if snapper is installed
+* Calculate the checksum of generated initramfs and appends it to the filename
+    * This is especially useful for snapshots because we can reuse existing
+      initramfs if they are the same. This helps to save storage space.
