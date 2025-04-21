@@ -3,6 +3,9 @@
 shopt -s extglob nullglob
 set -e
 
+ESP="$(bootctl -p)"
+ENTRY_DIR="${ESP}/loader/entries"
+
 # when creating a snapshot we fetch all bls configs from previous snapshot dir,
 # mangle them to contain current snapshot number, then install to efi partition.
 create_snapshot() {
@@ -12,9 +15,7 @@ create_snapshot() {
 
     [ "$fs" = btrfs ] || return 1
 
-    # Pre snapshots are somehow always even
-    entry_dir="/boot/loader/entries"
-    for entry in "$entry_dir"/*.conf; do
+    for entry in "$ENTRY_DIR"/*.conf; do
         snap_path=".snapshots/${num}"
 
         if grep -q 'post' "/${snap_path}/info.xml"; then
@@ -39,8 +40,7 @@ delete_snapshot() {
 
     [ "$fs" = btrfs ] || return 1
 
-    entry_dir="/boot/loader/entries"
-    for entry in "$entry_dir"/*-"${num}".conf; do
+    for entry in "$ENTRY_DIR"/*-"${num}".conf; do
         [[ -f "$entry" ]] && bootctl unlink "${entry##*/}"
     done
 
