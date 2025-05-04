@@ -89,7 +89,9 @@ remove_entry() {
     fi
 
     # Extra cleanup
-    bootctl cleanup >/dev/null
+    if [[ ! -f "${ESP}/${MACHINE_ID}/${kerver}/linux" ]]; then
+        rm -rf "${ESP}/${MACHINE_ID}/${kerver:?}"
+    fi
 }
 
 help() {
